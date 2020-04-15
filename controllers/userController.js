@@ -1,17 +1,22 @@
 // 2. ROUTE HANDLERS/CONTROLLERS
 
-const fs = require('fs');
+const User = require('./../models/userModel');
+const catchAsync = require('./../utils/catchAsync');
 
-const users = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find();
 
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route is not yet defined'
+  console.log(req.requestTime);
+
+  // SEND RESPONSE
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: {
+      users
+    }
   });
-};
+});
 
 exports.createUser = (req, res) => {
   res.status(500).json({
