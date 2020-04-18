@@ -81,5 +81,12 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   // 4) Check if user changed password after JWT token was issued
+  if (freshUser.changedPasswordAfter(decoded.iat)) {
+    return next(
+      new AppError('User recently changedd password! Please log in again', 401)
+    );
+  }
+  // GRANT access to protected route
+  req.user = freshUser;
   next();
 });
