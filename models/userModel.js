@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     select: false
   },
+  passwordChangedAt: Date,
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
@@ -31,8 +32,7 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords do not match!'
     }
-  },
-  passwordChangedAt: Date
+  }
 });
 
 userSchema.pre('save', async function(next) {
