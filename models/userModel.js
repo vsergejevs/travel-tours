@@ -40,7 +40,12 @@ const userSchema = new mongoose.Schema({
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
-  passwordResetExpires: Date
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false
+  }
 });
 
 userSchema.pre('save', async function(next) {
@@ -54,12 +59,19 @@ userSchema.pre('save', async function(next) {
   this.passwordConfirm = undefined;
   next();
 });
-
+// Added boolean type account information to userSchemma
+// Added a pre save middleware to return only users that dont have false
 // Update changedPasswordAt property for the user in DB
 userSchema.pre('save', function(next) {
   if (!this.isModified('password' || this.isNew)) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
+userSchema.pre(/^find/, function(next) {
+  // this points to the current query
+  this.find({ active: { $ne: false } }); // returning all users that are not false, only the active ones
   next();
 });
 
