@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -10,24 +11,26 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 // 1. GLOAL MIDDLEWARES
-// The process.env property returns an object containing the user environment.
-//console.log(process.env.NODE_ENV);
+
+// Set security HTTP headers
+app.use(helmet());
+
+// Development logging The process.env property returns an object containing the user environment.
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
+// Limit requests from same IP
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!'
 });
-
 app.use('/api', limiter);
 
-// Method - a built-in middleware function in Express. It parses incoming requests with JSON payloads
-app.use(express.json());
+// Body parser, reading data from body into req.body. Method - a built-in middleware function in Express. It parses incoming requests with JSON payloads
+app.use(express.json({ limit: '10kb' }));
 
-// Method - a built-in middleware function in Express. It serves static files
+// Serving static files. Method - a built-in middleware function in Express. It serves static files
 app.use(express.static(`${__dirname}/public`));
 
 // Middleware that runs everytime a request to the server is made
@@ -36,7 +39,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware to log request time in controllers
+// Test middleware. Middleware to log request time in controllers
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(req.headers);
