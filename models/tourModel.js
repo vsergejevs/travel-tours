@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const validator = require('validator'); // String validation library https://github.com/validatorjs/validator.js
-const User = require('./userModel');
+// const User = require('./userModel');
 
 //dataschema https://mongoosejs.com/docs/guide.html#definition
 const tourSchema = new mongoose.Schema(
@@ -105,7 +105,12 @@ const tourSchema = new mongoose.Schema(
         day: Number
       }
     ],
-    guides: Array
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     toJSON: { virtuals: true },
@@ -128,12 +133,12 @@ tourSchema.pre('save', function(next) {
 });
 
 // Retrieve user documents corresponding to id's
-tourSchema.pre('save', async function(next) {
-  const guidesPromises = this.guides.map(async id => User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
+// tourSchema.pre('save', async function(next) {
+//   const guidesPromises = this.guides.map(async id => User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
 
-  next();
-});
+//   next();
+// });
 
 // tourSchema.pre('save', function(next) {
 //   console.log('Will save document..');
@@ -156,6 +161,16 @@ tourSchema.pre(/^find/, function(next) {
 tourSchema.post(/^find/, function(docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
   //console.log(docs);
+  next();
+});
+
+// Populate the tour with gudes
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    //poulate function is fundamental when working with mongoose
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
   next();
 });
 
