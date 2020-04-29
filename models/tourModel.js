@@ -164,7 +164,7 @@ tourSchema.post(/^find/, function(docs, next) {
   next();
 });
 
-// Populate the tour with gudes
+// Populate the tour with guides
 tourSchema.pre(/^find/, function(next) {
   this.populate({
     //poulate function is fundamental when working with mongoose
