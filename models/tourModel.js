@@ -139,24 +139,6 @@ tourSchema.pre('save', function(next) {
   next();
 });
 
-// Retrieve user documents corresponding to id's
-// tourSchema.pre('save', async function(next) {
-//   const guidesPromises = this.guides.map(async id => User.findById(id));
-//   this.guides = await Promise.all(guidesPromises);
-
-//   next();
-// });
-
-// tourSchema.pre('save', function(next) {
-//   console.log('Will save document..');
-//   next();
-// });
-
-// tourSchema.post('save', function(doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY MIDDLEWARE that runs before find method to exclude secret tour from results
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
