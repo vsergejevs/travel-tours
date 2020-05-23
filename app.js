@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -14,7 +15,14 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
+// Setup pug engine for frontend rendering
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // 1. GLOAL MIDDLEWARES
+
+// Serving static files. Method - a built-in middleware function in Express. It serves static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
 app.use(helmet());
@@ -54,9 +62,6 @@ app.use(
   })
 );
 
-// Serving static files. Method - a built-in middleware function in Express. It serves static files
-app.use(express.static(`${__dirname}/public`));
-
 // Middleware that runs everytime a request to the server is made
 app.use((req, res, next) => {
   console.log('hello from middleware');
@@ -72,6 +77,13 @@ app.use((req, res, next) => {
 
 // 3. ROUTES
 //the below now acts as middleware
+app.get('/', (req, res) => {
+  res.status(200).render('base', {
+    tour: 'The Forest Hiker',
+    user: 'Jonas'
+  });
+});
+
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/reviews', reviewRouter);
