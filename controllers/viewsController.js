@@ -6,6 +6,6 @@ exports.getOverview = (req, res) => {
 
 exports.getTour = (req, res) => {
   res.status(200).render('tour', {
-    title: 'The Forest Hiker Tour'
+    title: 'The Forest Hiker tour'
   });
 };
