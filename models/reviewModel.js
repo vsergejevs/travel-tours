@@ -1,6 +1,7 @@
 // review / rating / createdAt / ref to tour / ref to user
 const mongoose = require('mongoose');
 const Tour = require('./tourModel');
+// const User = require('./userModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -34,21 +35,22 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+//Prevents one user to submit multiple reviews for one tour
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 reviewSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'tour',
+    select: 'name'
+  }).populate({
+    path: 'user',
+    select: 'name'
+  });
+
   // this.populate({
-  //   path: 'tour',
-  //   select: 'name'
-  // }).populate({
   //   path: 'user',
   //   select: 'name photo'
   // });
-
-  this.populate({
-    path: 'user',
-    select: 'name photo'
-  });
   next();
 });
 
@@ -65,7 +67,7 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
       }
     }
   ]);
-  // console.log(stats);
+  console.log(stats);
 
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourId, {
@@ -89,7 +91,7 @@ reviewSchema.post('save', function() {
 // findByIdAndDelete
 reviewSchema.pre(/^findOneAnd/, async function(next) {
   this.r = await this.findOne();
-  // console.log(this.r);
+  console.log(this.r);
   next();
 });
 
