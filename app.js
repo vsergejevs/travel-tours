@@ -43,6 +43,7 @@ app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body. Method - a built-in middleware function in Express. It parses incoming requests with JSON payloads
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
