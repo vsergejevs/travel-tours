@@ -68,14 +68,14 @@ app.use(
 
 // Middleware that runs everytime a request to the server is made
 app.use((req, res, next) => {
-  console.log('hello from middleware');
+  //console.log('hello from middleware');
   next();
 });
 
 // Test middleware. Middleware to log request time in controllers
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  //console.log(req.cookies);
   next();
 });
 
