@@ -29,19 +29,20 @@ const handleJWTExpiredError = () =>
 const sendErrorDev = (err, req, res) => {
   // API
   if (req.originalUrl.startsWith('/api')) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       error: err,
       message: err.message,
       stack: err.stack
     });
-  } else {
-    // RENDERED WEBSITE
-    res.status(err.statusCode).render('error', {
-      title: 'Something went wrong!',
-      msg: err.message
-    });
   }
+
+  // B) RENDERED WEBSITE
+  console.error('ERROR 💥', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: err.message
+  });
 };
 
 const sendErrorProd = (err, req, res) => {
@@ -54,14 +55,14 @@ const sendErrorProd = (err, req, res) => {
         message: err.message
       });
     }
-    // B)Programming or other unknown error: don't leak error details
-    // 1) Log error
-    // console.error('ERROR 💥', err);
-
+    // B) Programming or other unknown error: don't leak error details
     // 2) Send generic message
     return res.status(500).json({
       status: 'error',
       message: 'Something went very wrong!'
+      // status: err.status,
+      // message: err.message
+      //console.error('ERROR 💥', err.status, err.message);
     });
   }
 
