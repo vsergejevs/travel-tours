@@ -14,16 +14,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     payment_method_types: ['card'],
     success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${
       req.params.tourId
-    }&user=${req.user.id}&price=${tour.price}`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
+    }&user=${req.user.id}&price=${tour.price}`, // when user makes a payment
+    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`, //if user cancels the payment
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
+      // details about the product, about the tour in my case
       {
         name: `${tour.name} Tour`,
         description: tour.summary,
         images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
-        amount: tour.price * 100,
+        amount: tour.price * 100, // amount is expected to be in cents, therefore the * 100
         currency: 'usd',
         quantity: 1
       }
