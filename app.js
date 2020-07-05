@@ -30,6 +30,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Implement CORS - cross origin resource sharing
 app.use(cors());
+// Access-Control-Allow-Origin *
+// api.natours.com, front-end natours.com
+// app.use(cors({
+//   origin: 'https://www.natours.com'
+// }))
+
+app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors()); // browser prefligt phase
 
 // Serving static files. Method - a built-in middleware function in Express. It serves static files
 app.use(express.static(path.join(__dirname, 'public')));

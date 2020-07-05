@@ -8441,8 +8441,9 @@ var login = /*#__PURE__*/function () {
             _context.next = 3;
             return (0, _axios.default)({
               method: 'POST',
-              url: '/api/v1/users/login',
-              // url: 'http://127.0.0.1:3000/api/v1/users/login',// Development
+              //url: '/api/v1/users/login',
+              url: 'http://127.0.0.1:3000/api/v1/users/login',
+              // Development
               data: {
                 email: email,
                 password: password
@@ -8493,7 +8494,8 @@ var logout = /*#__PURE__*/function () {
             _context2.next = 3;
             return (0, _axios.default)({
               method: 'GET',
-              url: '/api/v1/users/logout' // url: 'http://127.0.0.1:3000/api/v1/users/logout'// Development
+              // url: '/api/v1/users/logout'
+              url: 'http://127.0.0.1:3000/api/v1/users/logout' // Development
 
             });
 
@@ -8550,8 +8552,10 @@ var updateSettings = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            url = type === 'password' ? '/api/v1/users/updateMyPassword' : '/api/v1/users/updateMe'; // ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword'// Development
-            // : 'http://127.0.0.1:3000/api/v1/users/updateMe';// Development
+            url = type === 'password' ? // ? '/api/v1/users/updateMyPassword'
+            // : '/api/v1/users/updateMe';
+            'http://127.0.0.1:3000/api/v1/users/updateMyPassword' // Development
+            : 'http://127.0.0.1:3000/api/v1/users/updateMe'; // Development
 
             _context.next = 4;
             return (0, _axios.default)({
@@ -8618,8 +8622,8 @@ var bookTour = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return (0, _axios.default)("/api/v1/bookings/checkout-session/".concat(tourId) // `http://127.0.0.1:3000/api/v1/bookings/checkout-session/${tourId}`
-            );
+            return (0, _axios.default)( // `/api/v1/bookings/checkout-session/${tourId}`
+            "http://127.0.0.1:3000/api/v1/bookings/checkout-session/".concat(tourId));
 
           case 3:
             session = _context.sent;
