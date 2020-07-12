@@ -5,6 +5,8 @@ const bookingController = require('../controllers/bookingController');
 
 const router = express.Router();
 
+router.use(viewsController.alerts);
+
 router.get(
   '/',
   // Below function not needed anymore because of Stripe checkout implementation
